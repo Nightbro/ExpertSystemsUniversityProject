@@ -1,0 +1,405 @@
+package com.sample.rules
+ 
+import com.sample.Osoba;
+import com.sample.Nacionalnost;
+import com.sample.Boja;
+import com.sample.Ljubimac;
+import com.sample.Instrument;
+import com.sample.Pice;
+
+/*
+1x.Britanac živi u crvenoj kući.
+2x. Šveđanin drži pse.
+3x. Danac pije čaj.
+4x. Zelena kuća je levo od bele kuće.
+5x. Vlasnik zelene kuće pije kafu.
+6x. Osoba koja svira violinu uzgaja ptice.
+7x. Vlasnik žute kuće svira klavir.
+8x. Vlasnik srednje kuće pije mleko.
+9x. Norvežanin živi u prvoj kući.
+10x. Čovek koji svira trubu živi pored onoga koji ima mačiće.
+11. Čovek koji drži konje živi pored čoveka koji svira klavir.
+12x. Vlasnik koji svira harmoniku pije pivo.
+13x. Nemac svira gitaru.
+14. Norvežanin živi pored plave kuće. -> iz 9 plava je 2
+15x. Čovek koji svira trubu ima komšiju koji pije vodu.
+
+
+4a - Zelena kuca nije 5ta
+4b - Bela kuca nije 1va
+10. Truba nije macke
+11. Konji nije klavir
+14. Norvezanin nije plava
+15. Truba nije voda
+
+Norvezanin nije plava, nije zelena, nije bela, moze biti crvena ili zuta
+
+Zelena kuca nije 1, 2, 5
+bela kuca nije 1, 2
+
+
+
+
+
+
+
+
+
+*/
+rule "Pravilo 1"
+    when
+        o : Osoba( nacionalnost == Nacionalnost.BRITANAC && boja == Boja.NOT_SELECTED )
+    then
+        o.setBoja( Boja.CRVENA );
+        update( o );
+end
+
+rule "Pravilo 2"
+	when
+        o : Osoba( nacionalnost == Nacionalnost.SVEDJANIN && ljubimac == Ljubimac.NOT_SELECTED )
+    then
+        o.setLjubimac( Ljubimac.PAS );
+        update( o );
+end
+
+rule "Pravilo 3"
+	when
+        o : Osoba( nacionalnost == Nacionalnost.DANAC && pice == Pice.NOT_SELECTED )
+    then
+        o.setPice( Pice.CAJ );
+        update( o );
+end
+
+
+
+rule "Pravilo 5"
+	when
+        o : Osoba( boja == Boja.ZELENA && pice == Pice.NOT_SELECTED )
+    then
+        o.setPice( Pice.KAFA );
+        update( o );
+end
+
+rule "Pravilo 6"
+	when
+        o : Osoba( instrument == Instrument.VIOLINA && ljubimac == Ljubimac.NOT_SELECTED )
+    then
+        o.setLjubimac( Ljubimac.PTICA );
+        update( o );
+end
+
+rule "Pravilo 7 Vlasnik žute kuće svira klavir"
+	when
+        o : Osoba( boja == Boja.ZUTA && instrument == Instrument.NOT_SELECTED )
+    then
+        o.setInstrument( Instrument.KLAVIR );
+        update( o );
+end
+
+rule "Pravilo 8"
+	when
+		o : Osoba( redosledKuca == 3 && pice == pice.NOT_SELECTED)
+    then
+        o.setPice( Pice.MLEKO );
+        update( o );
+end 
+
+rule "Pravilo 9"
+	when
+        o : Osoba( nacionalnost == Nacionalnost.NORVEZANIN && redosledKuca == 0 )
+    then
+        o.setRedosledKuca( 1 );
+        update( o );
+end
+
+rule "12. Vlasnik koji svira harmoniku pije pivo."
+	when
+        o : Osoba( instrument == Instrument.HARMONIKA && pice == Pice.NOT_SELECTED )
+    then
+        o.setPice( Pice.PIVO );
+        update( o );
+end
+
+rule "Pravilo 13"
+	when
+        o : Osoba( nacionalnost == Nacionalnost.NEMAC && instrument == Instrument.NOT_SELECTED)
+    then
+        o.setInstrument( Instrument.GITARA );
+        update( o );
+end
+
+rule "Pravilo 14 iz 14 i 9"
+	when
+        o : Osoba( boja == Boja.PLAVA && redosledKuca == 0)
+    then
+        o.setRedosledKuca( 2 );
+        update( o );
+end
+
+
+
+
+rule "Pravilo 4a - Bela kuca je desno od zelene"
+	when
+        o1 : Osoba( boja == Boja.ZELENA, redosledKuca != 0)
+        o2 : Osoba( boja == Boja.BELA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( o1.redosledKuca+1 );
+        update( o2 );
+end
+
+rule "Pravilo 4b - zelena kuca je levo od bele"
+	when
+        o1 : Osoba( boja == Boja.ZELENA, redosledKuca == 0)
+        o2 : Osoba( boja == Boja.BELA, redosledKuca != 0)
+    then
+        o1.setRedosledKuca( o2.redosledKuca-1 );
+        update( o2 );
+end
+
+//rule "10. Čovek koji svira trubu živi pored onoga koji ima mačiće."
+
+rule "10a - macke na pocetku, truba nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca == 1)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( 2 );
+        update( o2 );
+end
+
+rule "10a - macke na kraju, truba nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca == 5)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( 4 );
+        update( o2 );
+end
+
+rule "10b - truba na pocetku, macke nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca == 0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 1)
+    then
+        o1.setRedosledKuca( 2 );
+        update( o1 );
+end
+
+rule "10b - truba na kraju, macke nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca == 0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 5)
+    then
+        o1.setRedosledKuca( 4 );
+        update( o1 );
+end
+
+rule "10c - macka poznata, ima levog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index-1, instrument != Instrument.TRUBA) 
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( index+1 );
+        update( o2 );
+end
+
+rule "10c - macka poznata, ima desnog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index+1, instrument != Instrument.TRUBA ) 
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( index-1 );
+        update( o2 );
+end
+
+rule "10c - truba poznata, ima levog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA, redosledKuca==0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index-1, ljubimac != Ljubimac.MACKA) 
+        
+    then
+        o1.setRedosledKuca( index+1 );
+        update( o1 );
+end
+
+rule "10c - truba poznata, ima desnog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.MACKA,  redosledKuca==0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index+1, ljubimac != Ljubimac.MACKA) 
+
+    then
+        o1.setRedosledKuca( index-1 );
+        update( o1 );
+end
+
+
+
+
+
+
+//rule 15. Čovek koji svira trubu ima komšiju koji pije vodu."
+
+rule "15a - voda na pocetku, truba nepoznata"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca == 1)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( 2 );
+        update( o2 );
+end
+
+rule "15a - voda na kraju, truba nepoznata"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca == 5)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( 4 );
+        update( o2 );
+end
+
+rule "15b - truba na pocetku, voda nepoznata"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca == 0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 1)
+    then
+        o1.setRedosledKuca( 2 );
+        update( o1 );
+end
+
+rule "15b - truba na kraju, voda nepoznata"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca == 0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 5)
+    then
+        o1.setRedosledKuca( 4 );
+        update( o1 );
+end
+
+rule "15c - voda poznata, ima levog komsiju"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index-1, instrument != Instrument.TRUBA) 
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( index+1 );
+        update( o2 );
+end
+
+rule "15c - voda poznata, ima desnog komsiju"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index+1, instrument != Instrument.TRUBA) 
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( index-1 );
+        update( o2 );
+end
+
+rule "15c - truba poznata, ima levog komsiju"
+	when
+        o1 : Osoba( pice == Pice.VODA, redosledKuca==0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index-1, pice != Pice.VODA) 
+        
+    then
+        o1.setRedosledKuca( index+1 );
+        update( o1 );
+end
+
+rule "15c - truba poznata, ima desnog komsiju"
+	when
+        o1 : Osoba( pice == Pice.VODA,  redosledKuca==0)
+        o2 : Osoba( instrument == Instrument.TRUBA, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index+1, pice != Pice.VODA) 
+
+    then
+        o1.setRedosledKuca( index-1 );
+        update( o1 );
+end
+
+
+
+//11. Čovek koji drži konje živi pored čoveka koji svira klavir.
+
+rule "15a - konji na pocetku, klavir nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca == 1)
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( 2 );
+        update( o2 );
+end
+
+rule "15a - konji na kraju, truba nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca == 5)
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( 4 );
+        update( o2 );
+end
+
+rule "15b - klavir na pocetku, voda nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca == 0)
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca == 1)
+    then
+        o1.setRedosledKuca( 2 );
+        update( o1 );
+end
+
+rule "15b - klavir na kraju, voda nepoznata"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca == 0)
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca == 5)
+    then
+        o1.setRedosledKuca( 4 );
+        update( o1 );
+end
+
+rule "15c - konji poznata, ima levog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index-1, instrument != Instrument.KLAVIR) 
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( index+1 );
+        update( o2 );
+end
+
+rule "15c - konji poznata, ima desnog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index+1, instrument != Instrument.KLAVIR) 
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca == 0)
+    then
+        o2.setRedosledKuca( index-1 );
+        update( o2 );
+end
+
+rule "15c - klavir poznata, ima levog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI, redosledKuca==0)
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index-1, ljubimac != Ljubimac.KONJI) 
+        
+    then
+        o1.setRedosledKuca( index+1 );
+        update( o1 );
+end
+
+rule "15c - klavir poznata, ima desnog komsiju"
+	when
+        o1 : Osoba( ljubimac == Ljubimac.KONJI,  redosledKuca==0)
+        o2 : Osoba( instrument == Instrument.KLAVIR, redosledKuca !=0, index:redosledKuca)
+        exists Osoba(redosledKuca == index+1, ljubimac != Ljubimac.KONJI) 
+
+    then
+        o1.setRedosledKuca( index-1 );
+        update( o1 );
+end
