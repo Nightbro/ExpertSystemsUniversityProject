@@ -1,0 +1,77 @@
+FUNCTION_BLOCK martial_art
+VAR_INPUT
+    physical_fitness: REAL;       // Physical Fitness Level
+    combat_style: REAL;           // Preferred Combat Style
+    self_defense: REAL;           // Self-Defense Focus
+    competition_level: REAL;      // Level of Competition
+END_VAR
+
+VAR_OUTPUT
+    martial_art: REAL;            // Martial Art Suggestion
+END_VAR
+
+FUZZIFY physical_fitness
+    TERM low := (0, 1) (30, 1) (40, 0);
+    TERM medium := (30, 0) (40, 1) (60, 1) (70, 0);
+    TERM high := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+FUZZIFY combat_style
+    TERM striking := (0, 1) (1, 1) (2, 0);
+    TERM mixed := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM grappling := (3, 0) (4, 1) (5, 1);
+END_FUZZIFY
+
+FUZZIFY self_defense
+    TERM low := (0, 1) (30, 1) (40, 0);
+    TERM medium := (30, 0) (40, 1) (60, 1) (70, 0);
+    TERM high := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+FUZZIFY competition_level
+    TERM casual := (0, 1) (30, 1) (40, 0);
+    TERM amateur := (30, 0) (40, 1) (60, 1) (70, 0);
+    TERM professional := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+DEFUZZIFY martial_art
+    TERM karate := (0, 1) (1, 1) (2, 0);
+    TERM jiu_jitsu := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM taekwondo := (3, 0) (4, 1) (5, 0);
+    TERM boxing := (4, 0) (5, 1) (6, 1) (7, 0);
+    TERM krav_maga := (6, 0) (7, 1) (8, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+
+RULEBLOCK martial_art_rules
+    AND : MIN;
+    ACT : MIN;
+    ACCU : MAX;
+
+    RULE 1 : IF physical_fitness IS low AND combat_style IS striking AND self_defense IS low AND competition_level IS casual THEN martial_art IS karate;
+    RULE 2 : IF physical_fitness IS low AND combat_style IS striking AND self_defense IS low AND competition_level IS amateur THEN martial_art IS boxing;
+    RULE 3 : IF physical_fitness IS low AND combat_style IS striking AND self_defense IS low AND competition_level IS professional THEN martial_art IS krav_maga;
+    RULE 4 : IF physical_fitness IS low AND combat_style IS grappling AND self_defense IS medium AND competition_level IS casual THEN martial_art IS karate;
+    RULE 5 : IF physical_fitness IS low AND combat_style IS grappling AND self_defense IS medium AND competition_level IS amateur THEN martial_art IS boxing;
+    RULE 6 : IF physical_fitness IS low AND combat_style IS grappling AND self_defense IS medium AND competition_level IS professional THEN martial_art IS krav_maga;
+    RULE 7 : IF physical_fitness IS low AND combat_style IS mixed AND self_defense IS high AND competition_level IS casual THEN martial_art IS taekwondo;
+    RULE 8 : IF physical_fitness IS low AND combat_style IS mixed AND self_defense IS high AND competition_level IS amateur THEN martial_art IS taekwondo;
+    RULE 9 : IF physical_fitness IS low AND combat_style IS mixed AND self_defense IS high AND competition_level IS professional THEN martial_art IS taekwondo;
+    RULE 10 : IF physical_fitness IS medium AND combat_style IS striking AND self_defense IS low AND competition_level IS casual THEN martial_art IS jiu_jitsu;
+    RULE 11 : IF physical_fitness IS medium AND combat_style IS striking AND self_defense IS low AND competition_level IS amateur THEN martial_art IS jiu_jitsu;
+    RULE 12 : IF physical_fitness IS medium AND combat_style IS grappling AND self_defense IS low AND competition_level IS professional THEN martial_art IS jiu_jitsu;
+    RULE 13 : IF physical_fitness IS medium AND combat_style IS grappling AND self_defense IS medium AND competition_level IS casual THEN martial_art IS jiu_jitsu;
+    RULE 14 : IF physical_fitness IS medium AND combat_style IS mixed AND self_defense IS medium AND competition_level IS amateur THEN martial_art IS jiu_jitsu;
+    RULE 15 : IF physical_fitness IS medium AND combat_style IS mixed AND self_defense IS medium AND competition_level IS professional THEN martial_art IS taekwondo;
+    RULE 16 : IF physical_fitness IS high AND combat_style IS striking AND self_defense IS low AND competition_level IS casual THEN martial_art IS jiu_jitsu;
+    RULE 17 : IF physical_fitness IS high AND combat_style IS striking AND self_defense IS low AND competition_level IS amateur THEN martial_art IS jiu_jitsu;
+    RULE 18 : IF physical_fitness IS high AND combat_style IS grappling AND self_defense IS low AND competition_level IS professional THEN martial_art IS taekwondo;
+    RULE 19 : IF physical_fitness IS high AND combat_style IS mixed AND self_defense IS medium AND competition_level IS casual THEN martial_art IS taekwondo;
+    RULE 20 : IF physical_fitness IS high AND combat_style IS mixed AND self_defense IS medium AND competition_level IS amateur THEN martial_art IS taekwondo;
+END_RULEBLOCK
+
+
+
+END_FUNCTION_BLOCK
