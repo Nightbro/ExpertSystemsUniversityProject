@@ -28,21 +28,23 @@ public class Main {
         System.out.print("How is your self defence? (from 1 to 100): ");
         double selfDefense = scanner.nextDouble();
 
-        System.out.print("How competitive you are (from 1 to 100): ");
-        double competitionLevel = scanner.nextDouble();
+        //System.out.print("How competitive you are (from 1 to 100): ");
+        //double competitionLevel = scanner.nextDouble();
         
 		
 		
 		fis.setVariable("physical_fitness", physicalFitness);
 		fis.setVariable("combat_style", combatStyle);
 		fis.setVariable("self_defense", selfDefense);
-		fis.setVariable("competition_level", competitionLevel);
+		//fis.setVariable("competition_level", competitionLevel);
 		
 		fis.evaluate();
 		
-		System.out.println("Martial Art Suggestion: " + fis.getVariable("martial_art").defuzzify());
-		
-		
+		System.out.println("Karate suggestion: " + fis.getVariable("karate").defuzzify());
+		System.out.println("Jui Jitsu suggestion: " + fis.getVariable("jiu_jitsu").defuzzify());
+		System.out.println("Taekwondo suggestion: " + fis.getVariable("taekwondo").defuzzify());
+		System.out.println("Boxing suggestion: " + fis.getVariable("boxing").defuzzify());
+		System.out.println("Krav Maga suggestion: " + fis.getVariable("krav_maga").defuzzify());
 		
 		//for(Rule r: 
 			//fis.getFunctionBlock("martial_art")
