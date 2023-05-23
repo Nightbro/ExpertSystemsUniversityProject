@@ -1,0 +1,105 @@
+FUNCTION_BLOCK software_technology
+VAR_INPUT
+    relevant_experience: REAL;
+    visual_representation: REAL;
+    application_complexity: REAL;
+    application_performance:REAL;
+    data_size: REAL;
+    
+END_VAR
+
+VAR_OUTPUT
+    python: REAL;
+    sql: REAL;
+    powershell_batch: REAL;
+    java_csharp: REAL;
+    html_css: REAL;
+    javascript_typescript: REAL;
+END_VAR
+
+FUZZIFY relevant_experience
+    TERM non_existing := (0, 1) (2, 1) (5, 0);
+    TERM beginner := (5, 0) (30, 1) (40, 0);
+    TERM intermediate := (30, 0) (40, 1) (60, 1) (70, 0);
+    TERM advanced := (60, 0) (70, 1) (100, 1);
+    TERM expert := (80, 0) (90, 1) (100, 1);
+END_FUZZIFY
+
+FUZZIFY visual_representation
+	TERM non_relevant := (0, 1) (30, 1) (40, 0);
+	TERM required := (20, 0) (40, 1) (60, 1) (70, 0);
+	TERM highly_relevant := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+FUZZIFY application_complexity
+	TERM simple := (0, 1) (30, 1) (40, 0);
+	TERM non_relevant := (30, 0) (40, 1) (60, 1) (70, 0);
+	TERM complex := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+FUZZIFY application_performance
+	TERM non_relevant := (0, 1) (30, 1) (40, 0);
+	TERM somehow_relevant := (30, 0) (40, 1) (60, 1) (70, 0);
+	TERM required := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+FUZZIFY data_size
+	TERM small_database := (0, 1) (30, 1) (40, 0);
+	TERM usual_size := (30, 0) (40, 1) (60, 1) (70, 0);
+	TERM big_database := (60, 0) (70, 1) (100, 1);
+END_FUZZIFY
+
+DEFUZZIFY python
+    TERM not_recomended := (0, 1) (1, 1) (2, 0);
+    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY sql
+    TERM not_recomended := (0, 1) (1, 1) (2, 0);
+    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY powershell_batch
+    TERM not_recomended := (0, 1) (1, 1) (2, 0);
+    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY java_csharp
+    TERM not_recomended := (0, 1) (1, 1) (2, 0);
+    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY html_css
+    TERM not_recomended := (0, 1) (1, 1) (2, 0);
+    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY javascript_typescript
+    TERM not_recomended := (0, 1) (1, 1) (2, 0);
+    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+
+
+
+
+
+END_FUNCTION_BLOCK
