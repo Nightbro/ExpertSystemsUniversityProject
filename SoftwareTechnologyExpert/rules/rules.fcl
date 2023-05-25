@@ -10,11 +10,15 @@ END_VAR
 
 VAR_OUTPUT
     python: REAL;
+    json: REAL;
+    xml: REAL;
     sql: REAL;
     powershell_batch: REAL;
     java_csharp: REAL;
     html_css: REAL;
-    javascript_typescript: REAL;
+    angular_react: REAL;
+    javascript: REAL;
+    typescript: REAL;
 END_VAR
 
 FUZZIFY relevant_experience
@@ -26,19 +30,19 @@ FUZZIFY relevant_experience
 END_FUZZIFY
 
 FUZZIFY visual_representation
-	TERM non_relevant := (0, 1) (30, 1) (40, 0);
+	TERM irrelevant := (0, 1) (30, 1) (40, 0);
 	TERM required := (20, 0) (40, 1) (60, 1) (70, 0);
 	TERM highly_relevant := (60, 0) (70, 1) (100, 1);
 END_FUZZIFY
 
 FUZZIFY application_complexity
 	TERM simple := (0, 1) (30, 1) (40, 0);
-	TERM non_relevant := (30, 0) (40, 1) (60, 1) (70, 0);
+	TERM irrelevant := (30, 0) (40, 1) (60, 1) (70, 0);
 	TERM complex := (60, 0) (70, 1) (100, 1);
 END_FUZZIFY
 
 FUZZIFY application_performance
-	TERM non_relevant := (0, 1) (30, 1) (40, 0);
+	TERM irrelevant := (0, 1) (30, 1) (40, 0);
 	TERM somehow_relevant := (30, 0) (40, 1) (60, 1) (70, 0);
 	TERM required := (60, 0) (70, 1) (100, 1);
 END_FUZZIFY
@@ -50,56 +54,254 @@ FUZZIFY data_size
 END_FUZZIFY
 
 DEFUZZIFY python
-    TERM not_recomended := (0, 1) (1, 1) (2, 0);
-    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
-    TERM recommended := (3, 0) (4, 1) (5, 1);
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
 DEFUZZIFY sql
-    TERM not_recomended := (0, 1) (1, 1) (2, 0);
-    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
-    TERM recommended := (3, 0) (4, 1) (5, 1);
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
+DEFUZZIFY json
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY xml
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+
 DEFUZZIFY powershell_batch
-    TERM not_recomended := (0, 1) (1, 1) (2, 0);
-    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
-    TERM recommended := (3, 0) (4, 1) (5, 1);
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
 DEFUZZIFY java_csharp
-    TERM not_recomended := (0, 1) (1, 1) (2, 0);
-    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
-    TERM recommended := (3, 0) (4, 1) (5, 1);
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
 DEFUZZIFY html_css
-    TERM not_recomended := (0, 1) (1, 1) (2, 0);
-    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
-    TERM recommended := (3, 0) (4, 1) (5, 1);
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
-DEFUZZIFY javascript_typescript
-    TERM not_recomended := (0, 1) (1, 1) (2, 0);
-    TERM irrelevant := (1, 0) (2, 1) (3, 1) (4, 0);
-    TERM recommended := (3, 0) (4, 1) (5, 1);
+DEFUZZIFY angular_react
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY javascript
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY typescript
+    TERM irrelevant := (0, 1) (1, 1) (2, 0);
+    TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
 
+RULEBLOCK visual_representation_rb
+	AND : MIN;
+	ACT : MIN;
+	ACCU : MAX;
+	
+	RULE 1: IF visual_representation IS irrelevant
+				THEN html_css IS irrelevant;
+	RULE 2: IF visual_representation IS irrelevant
+				THEN angular_react IS irrelevant;
+	RULE 3: IF visual_representation IS irrelevant
+				THEN javascript IS irrelevant;
+	RULE 4: IF visual_representation IS irrelevant
+				THEN typescript IS irrelevant;
+				
+	RULE 5: IF visual_representation IS required
+				THEN html_css IS highly_recommended;
+	RULE 6: IF visual_representation IS required AND relevant_experience IS non_existing OR visual_representation IS required AND relevant_experience IS beginner
+				THEN angular_react IS irrelevant;
+	RULE 7: IF visual_representation IS required AND relevant_experience IS intermediate OR visual_representation IS required AND relevant_experience IS advanced
+				THEN angular_react IS recommended;
+	RULE 8: IF visual_representation IS required AND relevant_experience IS expert
+				THEN angular_react IS highly_recommended;
+	RULE 9: IF visual_representation IS required
+				THEN javascript IS highly_recommended;
+	RULE 10: IF visual_representation IS required AND relevant_experience IS non_existing OR visual_representation IS required AND relevant_experience IS beginner
+				THEN typescript IS irrelevant;
+	RULE 11: IF visual_representation IS required AND relevant_experience IS intermediate OR visual_representation IS required AND relevant_experience IS advanced
+				THEN typescript IS recommended;
+	RULE 12: IF visual_representation IS required AND relevant_experience IS expert
+				THEN typescript IS highly_recommended;			
+	
+	
+	
+	RULE 13: IF visual_representation IS highly_relevant
+				THEN html_css IS highly_recommended;
+	RULE 14: IF visual_representation IS highly_relevant
+				THEN javascript IS highly_recommended;
+	RULE 15: IF visual_representation IS highly_relevant AND relevant_experience IS non_existing
+				THEN typescript IS recommended;
+	RULE 16: IF visual_representation IS highly_relevant AND relevant_experience IS NOT non_existing
+				THEN typescript IS highly_recommended;
+	RULE 17: IF visual_representation IS highly_relevant AND relevant_experience IS non_existing
+				THEN angular_react IS recommended;
+	RULE 18: IF visual_representation IS highly_relevant AND relevant_experience IS NOT non_existing
+				THEN angular_react IS highly_recommended;	
+	
+END_RULEBLOCK
 
+RULEBLOCK dataset_rb
+	AND : MIN;
+	ACT : MIN;
+	ACCU : MAX;
+	
+	
+	RULE 1: IF data_size IS small_database AND relevant_experience IS non_existing OR data_size IS small_database AND relevant_experience IS beginner
+				THEN sql IS irrelevant;
+	RULE 2: IF data_size IS small_database AND relevant_experience IS non_existing OR data_size IS small_database AND relevant_experience IS beginner
+				THEN json IS irrelevant;
+	RULE 3: IF data_size IS small_database AND relevant_experience IS non_existing OR data_size IS small_database AND relevant_experience IS beginner
+				THEN xml IS irrelevant;
+	RULE 4: IF data_size IS small_database AND relevant_experience IS intermediate OR data_size IS small_database AND relevant_experience IS advanced
+				THEN sql IS irrelevant;
+	RULE 5: IF data_size IS small_database AND relevant_experience IS intermediate OR data_size IS small_database AND relevant_experience IS advanced
+				THEN json IS recommended;	
+	RULE 6: IF data_size IS small_database AND relevant_experience IS intermediate OR data_size IS small_database AND relevant_experience IS advanced
+				THEN xml IS recommended;
+	RULE 7: IF data_size IS small_database AND relevant_experience IS expert 
+				THEN sql IS recommended;
+	RULE 8: IF data_size IS small_database AND relevant_experience IS expert 
+				THEN json IS highly_recommended;		
+	RULE 9: IF data_size IS small_database AND relevant_experience IS expert 
+				THEN xml IS highly_recommended;
+				
+	RULE 10: IF data_size IS usual_size AND relevant_experience IS non_existing OR data_size IS small_database AND relevant_experience IS beginner
+				THEN sql IS recommended;
+	RULE 11: IF data_size IS usual_size AND relevant_experience IS non_existing OR data_size IS small_database AND relevant_experience IS beginner
+				THEN json IS highly_recommended;
+	RULE 12: IF data_size IS usual_size AND relevant_experience IS non_existing OR data_size IS small_database AND relevant_experience IS beginner
+				THEN xml IS highly_recommended;
+	RULE 13: IF data_size IS usual_size AND relevant_experience IS intermediate OR data_size IS small_database AND relevant_experience IS advanced OR data_size IS small_database AND relevant_experience IS expert
+				THEN sql IS highly_recommended;
+	RULE 14: IF data_size IS usual_size AND relevant_experience IS intermediate OR data_size IS small_database AND relevant_experience IS advanced OR data_size IS small_database AND relevant_experience IS expert
+				THEN json IS recommended;
+	RULE 15: IF data_size IS usual_size AND relevant_experience IS intermediate OR data_size IS small_database AND relevant_experience IS advanced OR data_size IS small_database AND relevant_experience IS expert
+				THEN xml IS recommended;
+					
+	RULE 16: IF data_size IS big_database 
+				THEN sql IS highly_recommended;
+	RULE 17: IF data_size IS big_database 
+				THEN json IS irrelevant;
+	RULE 18: IF data_size IS big_database 
+				THEN xml IS irrelevant;	
+				
 
+END_RULEBLOCK	
+
+RULEBLOCK general_complexity_rb
+	AND : MIN;
+	ACT : MIN;
+	ACCU : MAX;
+	//relevant inputs relevant_experience, application_complexity, application_performance
+	//relevant outputs powershell_batch python java_csharp
+	
+	RULE 1: IF application_complexity IS complex 
+				THEN powershell_batch IS irrelevant;
+				
+	RULE 2: IF application_complexity IS irrelevant AND relevant_experience IS non_existing OR application_complexity IS irrelevant AND relevant_experience IS beginner
+				THEN powershell_batch IS recommended;
+	RULE 3: IF application_complexity IS irrelevant AND relevant_experience IS intermediate OR application_complexity IS irrelevant AND relevant_experience IS advanced
+				THEN powershell_batch IS recommended;
+	RULE 4: IF application_complexity IS irrelevant AND relevant_experience IS expert
+				THEN powershell_batch IS irrelevant;
+	
+	RULE 5: IF application_complexity IS simple AND relevant_experience IS non_existing OR application_complexity IS irrelevant AND relevant_experience IS beginner
+				THEN powershell_batch IS highly_recommended;
+	RULE 6: IF application_complexity IS simple AND relevant_experience IS intermediate OR application_complexity IS irrelevant AND relevant_experience IS advanced
+				THEN powershell_batch IS highly_recommended;
+	RULE 7: IF application_complexity IS simple AND relevant_experience IS expert
+				THEN powershell_batch IS recommended;
+				
+	
+	RULE 8: IF application_complexity IS complex 
+				THEN python IS recommended;
+				
+	RULE 9: IF application_complexity IS irrelevant AND relevant_experience IS non_existing OR application_complexity IS irrelevant AND relevant_experience IS beginner
+				THEN python IS highly_recommended;
+	RULE 10: IF application_complexity IS irrelevant AND relevant_experience IS intermediate OR application_complexity IS irrelevant AND relevant_experience IS advanced
+				THEN python IS highly_recommended;
+	RULE 11: IF application_complexity IS irrelevant AND relevant_experience IS expert
+				THEN python IS recommended;
+	
+	RULE 12: IF application_complexity IS simple AND relevant_experience IS non_existing OR application_complexity IS irrelevant AND relevant_experience IS beginner
+				THEN python IS recommended;
+	RULE 13: IF application_complexity IS simple AND relevant_experience IS intermediate OR application_complexity IS irrelevant AND relevant_experience IS advanced
+				THEN python IS recommended;
+	RULE 14: IF application_complexity IS simple AND relevant_experience IS expert
+				THEN python IS irrelevant;
+				
+	RULE 15: IF application_complexity IS complex 
+				THEN java_csharp IS highly_recommended;
+				
+	RULE 16: IF application_complexity IS irrelevant AND relevant_experience IS non_existing OR application_complexity IS irrelevant AND relevant_experience IS beginner
+				THEN java_csharp IS highly_recommended;
+	RULE 17: IF application_complexity IS irrelevant AND relevant_experience IS intermediate OR application_complexity IS irrelevant AND relevant_experience IS advanced
+				THEN java_csharp IS highly_recommended;
+	RULE 18: IF application_complexity IS irrelevant AND relevant_experience IS expert
+				THEN java_csharp IS recommended;
+	
+	RULE 19: IF application_complexity IS simple AND relevant_experience IS non_existing OR application_complexity IS irrelevant AND relevant_experience IS beginner
+				THEN java_csharp IS recommended;
+	RULE 20: IF application_complexity IS simple AND relevant_experience IS intermediate OR application_complexity IS irrelevant AND relevant_experience IS advanced
+				THEN java_csharp IS recommended;
+	RULE 21: IF application_complexity IS simple AND relevant_experience IS expert
+				THEN java_csharp IS irrelevant;
+				
+	RULE 22: IF application_performance IS somehow_relevant 
+				THEN python IS recommended;				
+	RULE 23: IF application_performance IS somehow_relevant 
+			THEN java_csharp IS recommended;
+	RULE 24: IF application_performance IS somehow_relevant 
+				THEN python IS highly_recommended;				
+	RULE 25: IF application_performance IS somehow_relevant 
+				THEN java_csharp IS highly_recommended;		
+				
+	
+
+END_RULEBLOCK	
 
 
 END_FUNCTION_BLOCK
