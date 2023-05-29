@@ -9,17 +9,33 @@ import java.awt.event.*;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 import net.sourceforge.jFuzzyLogic.rule.Rule;
+import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,ChangeListener  {
 	JSlider slider1, slider2, slider3,slider4,slider5; 
 	JTextField tf; 
-	JLabel titlelabel1, valueLabel1, titlelabel2,valueLabel2,titlelabel3, valueLabel3,titlelabel4, valueLabel4,titlelabel5, valueLabel5, l; 
+	JLabel titlelabel1, valueLabel1, titlelabel2,valueLabel2,titlelabel3, valueLabel3,titlelabel4, valueLabel4,titlelabel5, valueLabel5, l, typeLabel, output1, output2, output3, output4, output5, output6, output7, output8, output9, output10; 
 	JButton b;  
-	
+	FIS fis;
+	JPanel outputPanel ;
 	
 	SoftwareTechonlogyExpertForm() {
+		fis = FIS.load("rules/rules.fcl");
+		
+		if (fis == null) {
+			System.out.println("Something went wrong");
+			return;
+		}
+		//JFuzzyChart.get().chart(fis);
+		//fis.setVariable("relevant_experience", relevantExperience);
+		//fis.evaluate();
+		//System.out.println("Python suggestion: " + fis.getVariable("python").defuzzify());
+		
 		setTitle("Software Techonology Expert Form");
-		//setLayout(new FlowLayout());
 		setLayout(null);
 		
 		b=new JButton("Make a suggestion");  
@@ -95,19 +111,123 @@ class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,Cha
         add(slider4);
         add(slider5);
         add(b);
-        setSize(1200,600);  
+        setSize(450,600);  
         //setLayout(null);  
         setVisible(true);  
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        typeLabel = new JLabel("Type of application");
+        typeLabel.setBounds(450,250,300,50);
+        typeLabel.setToolTipText("Tooltip text for Application Performance");
+        add(typeLabel);
 	}
 	
 	
+	private void addOutputLabel(String name, double value, String tooltip) {
+        JLabel label = new JLabel(name + " - (" + value + ")");
+        label.setToolTipText("Tooltip for " + name);
+        label.setHorizontalAlignment(JLabel.CENTER);
+
+        // Set the text color based on the value
+        if (value > 3.5) {
+            label.setForeground(Color.GREEN);
+        } else if (value > 1.5) {
+            label.setForeground(Color.BLACK);
+        } else {
+            label.setForeground(Color.GRAY);
+        }
+
+        outputPanel.add(label);
+    }
+	
+	private int roundUporDownResult(double result) {
+		if (result > 0) {
+			return (int)Math.round(result);
+		} else return -1;
+	}
+	 private void sortOutputLabels() {
+        List<Component> labels = new ArrayList<>();
+        for (Component component : outputPanel.getComponents()) {
+            labels.add(component);
+        }
+
+        // Sort the labels based on value in descending order
+        Collections.sort(labels, new Comparator<Component>() {
+            @Override
+            public int compare(Component c1, Component c2) {
+            	 JLabel label1 = (JLabel) c1;
+            	 JLabel label2 = (JLabel) c2;
+            	String value1 = label1.getText().substring(label1.getText().indexOf("(") + 1, label1.getText().indexOf(")"));
+                String value2 = label2.getText().substring(label2.getText().indexOf("(") + 1, label2.getText().indexOf(")"));
+                return roundUporDownResult( Double.parseDouble(value2) - Double.parseDouble(value1));
+            }
+        });
+
+        // Clear the output panel
+        outputPanel.removeAll();
+
+        // Add the sorted labels back to the output panel
+        for (Component label : labels) {
+            outputPanel.add(label);
+        }
+	 }
     public void actionPerformed(ActionEvent e) {  
-        try{  
-        String host=tf.getText();  
-        String ip=java.net.InetAddress.getByName(host).getHostAddress();  
-        l.setText("IP of "+host+" is: "+ip);  
+        try{
+        	int value1 = slider1.getValue();
+        	
+        	int value2 = slider2.getValue();
+        	int value3 = slider3.getValue();
+        	int value4 = slider4.getValue();
+        	int value5 = slider5.getValue();
+        	
+        	fis.setVariable("relevant_experience", value1);
+        	fis.setVariable("visual_representation", value2);
+        	fis.setVariable("application_complexity", value3);
+        	fis.setVariable("application_performance", value4);
+        	fis.setVariable("data_size", value5);
+        	
+        	fis.evaluate();
+        	
+        	setSize(1000, 600);
+        	
+        	outputPanel = new JPanel();
+            outputPanel.setLayout(new GridLayout(0, 1));
+            outputPanel.setBounds(750,50,200,200);
+            
+            addOutputLabel("Python", fis.getVariable("python").defuzzify(), "A versatile programming language known for its simplicity and readability, widely used in various domains including web development, data analysis, and artificial intelligence.");
+            addOutputLabel("JSON", fis.getVariable("json").defuzzify(), "A lightweight data interchange format commonly used for storing and transferring structured data, often used in web applications and APIs.");
+            addOutputLabel("XML", fis.getVariable("xml").defuzzify(), " A markup language designed to store and transport data, widely used for representing structured information in a human-readable format.");
+            addOutputLabel("SQL", fis.getVariable("sql").defuzzify(), "A standard language for managing and manipulating relational databases, used for tasks such as querying data, defining database structures, and performing data operations.");
+            addOutputLabel("Powershell or Batch", fis.getVariable("powershell_batch").defuzzify(), "Powershell is a scripting language used primarily for task automation and configuration management in Windows environments. Batch scripting is a simple scripting language used for executing sequences of commands in Windows.");
+            addOutputLabel("Java or C#", fis.getVariable("java_csharp").defuzzify(), "Java and C# are both object-oriented programming languages used for developing a wide range of applications, including desktop, web, and mobile applications.");
+            addOutputLabel("HTML and CSS", fis.getVariable("html_css").defuzzify(), "HTML is the standard markup language for creating web pages, defining the structure and content. CSS is used to describe the presentation and styling of the HTML elements.");
+            addOutputLabel("Angular or React", fis.getVariable("angular_react").defuzzify(), "Angular and React are popular JavaScript frameworks used for building dynamic and interactive web applications, providing tools and components for efficient development.");
+            addOutputLabel("JavaScript", fis.getVariable("javascript").defuzzify(), " A widely-used scripting language that enables dynamic and interactive functionality on web pages, often used for client-side development.");
+            addOutputLabel("TypeScript", fis.getVariable("typescript").defuzzify(), "A superset of JavaScript that adds static typing and additional features, providing enhanced tooling and scalability for larger JavaScript projects.");
+            add(outputPanel, BorderLayout.CENTER);
+            sortOutputLabels();
+            
+            //System.out.println(value1 + " " + value2 + " " + value3 + " " + value4 + " " + value5);
+            var general_type_value= fis.getVariable("general_type").defuzzify();
+            var type_value= fis.getVariable("type").defuzzify();
+            String type = "General Programming";
+            if (type_value<3) type = "Data Science";
+            if (general_type_value<3.5) type = "Full Stuck";
+            if (general_type_value<1.5) type = "Front-end developemnt";
+            
+            
+            typeLabel.setText("Type of application: "+ type);
+            
+    		//fis.setVariable("relevant_experience", relevantExperience);
+    		//fis.evaluate();
+    		//System.out.println("Python suggestion: " + fis.getVariable("python").defuzzify());
+            
+            
+        //String host=tf.getText();  
+        //String ip=java.net.InetAddress.getByName(host).getHostAddress();  
+        //l.setText("IP of "+host+" is: "+ip);  
         }catch(Exception ex){System.out.println(ex);}  
     }  
     
@@ -128,6 +248,7 @@ class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,Cha
             	valueLabel1.setText("Advanced");
             } else if (value1 >= 86 && value1 <= 100) {
             	valueLabel1.setText("Expert");
+            }
         } else if (source == slider2) {
             int value2 = slider2.getValue();
 
@@ -138,7 +259,7 @@ class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,Cha
             } else if (value2 >= 75 && value2 <= 100) {
                 valueLabel2.setText("Highly Required");
             }
-        } else if (source == slider3) {
+       } else if (source == slider3) {
             int value3 = slider3.getValue();
 
             if (value3 >= 0 && value3 <= 25) {
@@ -169,7 +290,7 @@ class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,Cha
                 valueLabel3.setText("Big Database");
             }
         }
-    }
+    
     }
 
 

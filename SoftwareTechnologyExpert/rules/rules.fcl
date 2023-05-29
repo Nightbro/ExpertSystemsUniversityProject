@@ -329,7 +329,7 @@ RULEBLOCK general_complexity_rb
 
 END_RULEBLOCK	
 
-RULEBLOCK type
+RULEBLOCK type_blc
 	RULE 1: IF data_size IS big_database AND visual_representation IS irrelevant THEN type IS data_science;
 	RULE 2: IF data_size IS big_database AND application_complexity IS simple THEN type IS data_science;
 
@@ -337,8 +337,8 @@ RULEBLOCK type
 	RULE 4: IF application_complexity IS irrelevant THEN general_type IS front_end;
 	RULE 5: IF visual_representation IS required THEN general_type IS front_end;
 	RULE 6: IF visual_representation IS highly_relevant THEN general_type IS front_end;
-	RULE 7: IF application_complexity IS required THEN general_type IS general_programming;
-	RULE 8: IF application_complexity IS required THEN general_type IS general_programming;
+	RULE 7: IF application_complexity IS irrelevant THEN general_type IS general_programming;
+	RULE 8: IF application_complexity IS irrelevant THEN general_type IS general_programming;
 
 
 END_RULEBLOCK	
