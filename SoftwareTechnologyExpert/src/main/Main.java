@@ -15,21 +15,23 @@ public class Main {
 			return;
 		}
 		
-		Scanner scanner = new Scanner(System.in);
-		JFuzzyChart.get().chart(fis);
+		//Scanner scanner = new Scanner(System.in);
+		//JFuzzyChart.get().chart(fis);
 		
         // Read input values from the user
-        System.out.print("What is your previous development experience (1 (i dont know anything about programing) - 100(I develop for more then 10 years)): ");
-        double relevantExperience = scanner.nextDouble();
+        //System.out.print("What is your previous development experience (1 (i dont know anything about programing) - 100(I develop for more then 10 years)): ");
+        //double relevantExperience = scanner.nextDouble();
 
        
-		fis.setVariable("relevant_experience", relevantExperience);
+		//fis.setVariable("relevant_experience", relevantExperience);
 		
-		fis.evaluate();
+		//fis.evaluate();
 		
-		System.out.println("Python suggestion: " + fis.getVariable("python").defuzzify());
+		new SoftwareTechonlogyExpertForm();
 		
-        scanner.close();
+		//System.out.println("Python suggestion: " + fis.getVariable("python").defuzzify());
+		
+        //scanner.close();
 	}
 
 }

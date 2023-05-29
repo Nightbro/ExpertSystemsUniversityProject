@@ -19,7 +19,12 @@ VAR_OUTPUT
     angular_react: REAL;
     javascript: REAL;
     typescript: REAL;
+    
+    type: REAL;
+    general_type:REAL;
 END_VAR
+
+
 
 FUZZIFY relevant_experience
     TERM non_existing := (0, 1) (2, 1) (5, 0);
@@ -77,12 +82,33 @@ DEFUZZIFY json
     DEFAULT := 0;
 END_DEFUZZIFY
 
+
+
+
 DEFUZZIFY xml
     TERM irrelevant := (0, 1) (1, 1) (2, 0);
     TERM recommended := (1, 0) (2, 1) (3, 1) (4, 0);
     TERM highly_recommended := (3, 0) (4, 1) (5, 1);
     METHOD : COG;
     DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY type
+	TERM general_programming := (3,0) (5, 1);
+	TERM data_science := (0, 1) (4, 0);
+	
+	METHOD: COG;
+	DEFAULT :=3;
+
+END_DEFUZZIFY
+
+DEFUZZIFY general_type
+	TERM front_end := (0, 1) (1, 1) (2, 0);
+    TERM fullstack := (1, 0) (2, 1) (3, 1) (4, 0);
+    TERM general_programming := (3, 0) (4, 1) (5, 1);
+    METHOD : COG;
+    DEFAULT := 3;
+
 END_DEFUZZIFY
 
 
@@ -303,5 +329,18 @@ RULEBLOCK general_complexity_rb
 
 END_RULEBLOCK	
 
+RULEBLOCK type
+	RULE 1: IF data_size IS big_database AND visual_representation IS irrelevant THEN type IS data_science;
+	RULE 2: IF data_size IS big_database AND application_complexity IS simple THEN type IS data_science;
+
+	RULE 3: IF visual_representation IS irrelevant THEN general_type IS general_programming;
+	RULE 4: IF application_complexity IS irrelevant THEN general_type IS front_end;
+	RULE 5: IF visual_representation IS required THEN general_type IS front_end;
+	RULE 6: IF visual_representation IS highly_relevant THEN general_type IS front_end;
+	RULE 7: IF application_complexity IS required THEN general_type IS general_programming;
+	RULE 8: IF application_complexity IS required THEN general_type IS general_programming;
+
+
+END_RULEBLOCK	
 
 END_FUNCTION_BLOCK
