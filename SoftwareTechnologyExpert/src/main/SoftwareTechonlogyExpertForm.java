@@ -270,7 +270,7 @@ class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,Cha
                 valueLabel3.setText("Complex");
             }
         } else if (source == slider4) {
-            int value4 = slider2.getValue();
+            int value4 = slider4.getValue();
 
             if (value4 >= 0 && value4 <= 25) {
                 valueLabel4.setText("Irrelevant");
