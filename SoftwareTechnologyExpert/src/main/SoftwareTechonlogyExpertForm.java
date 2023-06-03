@@ -214,7 +214,7 @@ class SoftwareTechonlogyExpertForm extends JFrame  implements ActionListener,Cha
             var type_value= fis.getVariable("type").defuzzify();
             String type = "General Programming";
             if (type_value<3) type = "Data Science";
-            if (general_type_value<3.5) type = "Full Stuck";
+            if (general_type_value<3.5) type = "FullStack development";
             if (general_type_value<1.5) type = "Front-end developemnt";
             
             
